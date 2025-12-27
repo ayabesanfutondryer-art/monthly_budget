@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="ja">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -11,7 +12,8 @@
             box-sizing: border-box;
         }
 
-        html, body {
+        html,
+        body {
             height: 100%;
         }
 
@@ -50,7 +52,7 @@
             flex: 1;
             overflow-y: auto;
             padding: 20px;
-            padding-bottom: 80px;
+            padding-bottom: calc(80px + env(safe-area-inset-bottom));
         }
 
         .page {
@@ -67,6 +69,7 @@
                 opacity: 0;
                 transform: translateY(10px);
             }
+
             to {
                 opacity: 1;
                 transform: translateY(0);
@@ -92,6 +95,7 @@
             display: flex;
             gap: 10px;
             padding: 10px 15px;
+            padding-bottom: calc(10px + env(safe-area-inset-bottom));
             background-color: #f5f7fa;
             border-top: 1px solid #e0e6ed;
             position: fixed;
@@ -534,7 +538,7 @@
 
             .content {
                 padding: 15px;
-                padding-bottom: 75px;
+                padding-bottom: calc(75px + env(safe-area-inset-bottom));
             }
 
             .summary-display {
@@ -578,6 +582,7 @@
 
             .nav {
                 padding: 8px 10px;
+                padding-bottom: calc(8px + env(safe-area-inset-bottom));
             }
 
             .nav button {
@@ -598,13 +603,14 @@
         }
     </style>
 
-<link rel="manifest" href="/manifest.webmanifest">
-<meta name="theme-color" content="#667eea">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<link rel="apple-touch-icon" href="/icons/icon-192.png">
+    <link rel="manifest" href="/manifest.webmanifest">
+    <meta name="theme-color" content="#667eea">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <link rel="apple-touch-icon" href="/icons/icon-192.png">
 
 </head>
+
 <body>
     <div class="container">
         <div class="header">
@@ -870,7 +876,7 @@
 
         function renderIncomeList() {
             const incomeList = document.getElementById('income-list');
-            
+
             if (incomeData.length === 0) {
                 incomeList.innerHTML = '<div class="item-list-empty">登録された収入項目がここに表示されます</div>';
                 return;
@@ -986,7 +992,7 @@
 
         function renderExpenseList() {
             const expenseList = document.getElementById('expense-list');
-            
+
             if (expenseData.length === 0) {
                 expenseList.innerHTML = '<div class="item-list-empty">登録された支出項目がここに表示されます</div>';
                 return;
@@ -1093,13 +1099,13 @@
         // ============================================
         // ページ読み込み時の初期化
         // ============================================
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             loadDataFromStorage();
             updateSummaryDisplay();
             renderExpenseList();
             renderIncomeList();
 
-            document.getElementById('add-expense-btn').addEventListener('click', function() {
+            document.getElementById('add-expense-btn').addEventListener('click', function () {
                 const nameInput = document.getElementById('expense-name');
                 const amountInput = document.getElementById('expense-amount');
                 const name = nameInput.value.trim();
@@ -1112,7 +1118,7 @@
                 }
             });
 
-            document.getElementById('add-income-btn').addEventListener('click', function() {
+            document.getElementById('add-income-btn').addEventListener('click', function () {
                 const nameInput = document.getElementById('income-name');
                 const amountInput = document.getElementById('income-amount');
                 const name = nameInput.value.trim();
@@ -1130,7 +1136,7 @@
         // ページ切り替え機能
         // ============================================
         document.querySelectorAll('.nav-btn').forEach(button => {
-            button.addEventListener('click', function() {
+            button.addEventListener('click', function () {
                 const pageId = this.getAttribute('data-page');
 
                 document.querySelectorAll('.page').forEach(page => {
@@ -1147,13 +1153,14 @@
         });
     </script>
 
-<script>
-if ('serviceWorker' in navigator) {
-  window.addEventListener('load', () => {
-    navigator.serviceWorker.register('/sw.js').catch(console.error);
-  });
-}
-</script>
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/sw.js').catch(console.error);
+            });
+        }
+    </script>
 
 </body>
+
 </html>
