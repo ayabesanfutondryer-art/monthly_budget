@@ -5,7 +5,21 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>月次収支管理アプリ</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;700&family=Share+Tech+Mono&display=swap"
+        rel="stylesheet">
     <style>
+        :root {
+            --cp-bg-dark: #1a1b26;
+            --cp-bg-panel: #08080c;
+            --cp-neon-cyan: #00f3ff;
+            --cp-neon-pink: #ff00ff;
+            --cp-neon-yellow: #ffee00;
+            --cp-neon-green: #00ff41;
+            --cp-text: #e0e0e0;
+            --cp-text-dim: #888;
+            --cp-border: #2f334d;
+        }
+
         * {
             margin: 0;
             padding: 0;
@@ -18,11 +32,25 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen', 'Ubuntu', 'Cantarell', sans-serif;
-            background-color: #f5f7fa;
+            font-family: 'Share Tech Mono', monospace;
+            background-color: var(--cp-bg-dark);
+            color: var(--cp-text);
             padding: 0;
             display: flex;
             flex-direction: column;
+            overflow: hidden;
+        }
+
+        input[type="number"]::-webkit-outer-spin-button,
+        input[type="number"]::-webkit-inner-spin-button {
+            -webkit-appearance: none;
+            appearance: none;
+            margin: 0;
+        }
+
+        input[type="number"] {
+            -moz-appearance: textfield;
+            appearance: textfield;
         }
 
         .container {
@@ -30,29 +58,54 @@
             flex-direction: column;
             height: 100vh;
             max-width: 100%;
-            background-color: white;
+            background-color: var(--cp-bg-dark);
+            position: relative;
+        }
+
+        .container::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background:
+                linear-gradient(rgba(0, 243, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 243, 255, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            pointer-events: none;
+            z-index: 0;
         }
 
         .header {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
+            background: rgba(8, 8, 12, 0.95);
+            border-bottom: 2px solid var(--cp-neon-cyan);
+            color: var(--cp-neon-cyan);
             padding: 20px;
             text-align: center;
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
             flex-shrink: 0;
+            position: relative;
+            z-index: 2;
+            text-shadow: 0 0 5px var(--cp-neon-cyan);
         }
 
         .header h1 {
+            font-family: 'Orbitron', sans-serif;
             font-size: 24px;
-            font-weight: 600;
+            font-weight: 700;
             margin: 0;
+            letter-spacing: 2px;
+            text-transform: uppercase;
         }
 
         .content {
             flex: 1;
             overflow-y: auto;
             padding: 20px;
-            padding-bottom: calc(80px + env(safe-area-inset-bottom));
+            padding-bottom: calc(90px + env(safe-area-inset-bottom));
+            position: relative;
+            z-index: 1;
         }
 
         .page {
@@ -77,86 +130,115 @@
         }
 
         .page h2 {
+            font-family: 'Orbitron', sans-serif;
             font-size: 20px;
             margin-bottom: 20px;
-            color: #2c3e50;
+            color: var(--cp-neon-pink);
             font-weight: 600;
-            border-bottom: 3px solid #667eea;
+            border-bottom: 2px solid var(--cp-neon-pink);
             padding-bottom: 10px;
+            text-align: center;
+            text-shadow: 0 0 8px rgba(255, 0, 255, 0.5);
+            letter-spacing: 1px;
         }
 
         .page-content {
             font-size: 16px;
-            color: #555;
+            color: var(--cp-text);
             line-height: 1.6;
         }
 
         .nav {
             display: flex;
-            gap: 10px;
-            padding: 10px 15px;
-            padding-bottom: calc(10px + env(safe-area-inset-bottom));
-            background-color: #f5f7fa;
-            border-top: 1px solid #e0e6ed;
+            gap: 15px;
+            padding: 15px;
+            padding-bottom: calc(15px + env(safe-area-inset-bottom));
+            background: rgba(10, 10, 15, 0.95);
+            border-top: 1px solid var(--cp-border);
             position: fixed;
             bottom: 0;
             left: 0;
             right: 0;
             z-index: 100;
-            box-shadow: 0 -2px 8px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
         }
 
         .nav button {
             flex: 1;
             padding: 12px 10px;
-            border: none;
-            border-radius: 8px;
-            background-color: #e0e6ed;
-            color: #666;
+            border: 1px solid var(--cp-border);
+            border-radius: 4px;
+            background-color: rgba(255, 255, 255, 0.05);
+            color: var(--cp-text-dim);
             font-size: 13px;
             cursor: pointer;
             transition: all 0.3s ease;
-            font-weight: 500;
+            font-weight: 600;
+            font-family: 'Share Tech Mono', monospace;
+            text-transform: uppercase;
         }
 
         .nav button:hover {
-            background-color: #d0d8e8;
-            transform: translateY(-2px);
+            background-color: rgba(0, 243, 255, 0.1);
+            color: var(--cp-neon-cyan);
+            border-color: var(--cp-neon-cyan);
+            box-shadow: 0 0 8px rgba(0, 243, 255, 0.3);
         }
 
         .nav button.active {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+            background-color: rgba(0, 243, 255, 0.15);
+            color: var(--cp-neon-cyan);
+            border-color: var(--cp-neon-cyan);
+            box-shadow: 0 0 10px rgba(0, 243, 255, 0.4), inset 0 0 5px rgba(0, 243, 255, 0.2);
         }
 
         .summary-display {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: var(--cp-bg-panel);
+            border: 1px solid var(--cp-neon-cyan);
             padding: 30px 20px;
-            border-radius: 12px;
+            border-radius: 4px;
             text-align: center;
             margin-bottom: 25px;
-            color: white;
-            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+            color: var(--cp-neon-cyan);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .summary-display::after {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(to bottom, transparent 50%, rgba(0, 243, 255, 0.05) 50%);
+            background-size: 100% 4px;
+            pointer-events: none;
         }
 
         .summary-display p {
             font-size: 13px;
-            opacity: 0.9;
+            opacity: 0.8;
             margin-bottom: 10px;
             font-weight: 500;
+            letter-spacing: 1px;
+            color: var(--cp-neon-cyan);
         }
 
         .summary-display .amount {
+            font-family: 'Orbitron', sans-serif;
             font-size: 42px;
             font-weight: 700;
             margin: 0;
+            text-shadow: 0 0 10px var(--cp-neon-cyan);
+            color: white;
         }
 
         .summary-stats {
-            background-color: #f5f7fa;
-            padding: 15px;
-            border-radius: 8px;
+            background-color: transparent;
+            padding: 0;
             margin-bottom: 20px;
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -164,83 +246,103 @@
         }
 
         .summary-stats-item {
-            background-color: white;
-            padding: 12px;
-            border-radius: 8px;
-            border-left: 4px solid #667eea;
+            background-color: var(--cp-bg-panel);
+            padding: 15px;
+            border-radius: 4px;
+            border: 1px solid var(--cp-border);
+            border-left: 4px solid var(--cp-neon-pink);
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+        }
+
+        .summary-stats-item:last-child {
+            border-left-color: var(--cp-neon-yellow);
         }
 
         .summary-stats-item label {
             display: block;
-            font-size: 12px;
-            color: #999;
+            font-size: 11px;
+            color: var(--cp-text-dim);
             margin-bottom: 5px;
             font-weight: 500;
+            text-transform: uppercase;
         }
 
         .summary-stats-item .value {
+            font-family: 'Orbitron', sans-serif;
             font-size: 18px;
             font-weight: 600;
-            color: #2c3e50;
+            color: var(--cp-text);
+            text-shadow: 0 0 2px rgba(255, 255, 255, 0.3);
         }
 
         .form-section {
-            background-color: #f5f7fa;
+            background-color: var(--cp-bg-panel);
             padding: 20px;
-            border-radius: 12px;
+            border-radius: 4px;
             margin-bottom: 25px;
+            border: 1px solid var(--cp-border);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
         }
 
         .form-group {
-            margin-bottom: 15px;
+            margin-bottom: 20px;
         }
 
         .form-group label {
             display: block;
-            font-size: 13px;
+            font-size: 12px;
             font-weight: 600;
             margin-bottom: 8px;
-            color: #2c3e50;
+            color: var(--cp-neon-cyan);
+            text-transform: uppercase;
+            letter-spacing: 1px;
         }
 
         .form-group input {
             width: 100%;
             padding: 12px;
-            border: 2px solid #e0e6ed;
-            border-radius: 8px;
-            font-size: 14px;
+            border: 1px solid #444;
+            border-radius: 0;
+            font-size: 16px;
             transition: all 0.3s ease;
-            font-family: inherit;
+            font-family: 'Share Tech Mono', monospace;
+            background-color: #000000;
+            color: #ffffff;
         }
 
         .form-group input:focus {
             outline: none;
-            border-color: #667eea;
-            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-            background-color: #fafbfc;
+            border-color: var(--cp-neon-pink);
+            box-shadow: 0 0 8px rgba(255, 0, 255, 0.3);
+            background-color: rgba(255, 0, 255, 0.05);
         }
 
         .form-group input::placeholder {
-            color: #bbb;
+            color: #555;
         }
 
         .add-button {
             width: 100%;
             padding: 14px;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            color: white;
-            border: none;
-            border-radius: 8px;
-            font-size: 14px;
+            background: rgba(0, 243, 255, 0.1);
+            color: var(--cp-neon-cyan);
+            border: 1px solid var(--cp-neon-cyan);
+            border-radius: 0;
+            font-size: 16px;
             font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
-            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+            transition: all 0.2s ease;
+            box-shadow: 0 0 10px rgba(0, 243, 255, 0.2);
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 2px;
+            text-transform: uppercase;
         }
 
         .add-button:hover {
+            background: var(--cp-neon-cyan);
+            color: #000;
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.6);
             transform: translateY(-2px);
-            box-shadow: 0 6px 16px rgba(102, 126, 234, 0.4);
         }
 
         .add-button:active {
@@ -254,37 +356,57 @@
         .item-list-empty {
             text-align: center;
             padding: 40px 20px;
-            color: #999;
+            color: var(--cp-text-dim);
             font-size: 14px;
+            border: 1px dashed var(--cp-border);
+            background: rgba(0, 0, 0, 0.2);
         }
 
-        /* 支出項目のスタイル */
         .expense-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 15px;
-            background-color: white;
-            border: 1px solid #e0e6ed;
-            border-left: 4px solid #e74c3c;
-            border-radius: 8px;
+            background-color: var(--cp-bg-panel);
+            border: 1px solid var(--cp-border);
+            border-left: 2px solid var(--cp-neon-yellow);
+            border-radius: 0;
             margin-bottom: 12px;
             transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .expense-item::before {
+            content: "";
+            position: absolute;
+            top: -1px;
+            right: -1px;
+            width: 10px;
+            height: 10px;
+            border-top: 2px solid var(--cp-neon-yellow);
+            border-right: 2px solid var(--cp-neon-yellow);
         }
 
         .expense-item:hover {
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 0 15px rgba(255, 238, 0, 0.1);
+            border-color: rgba(255, 238, 0, 0.3);
+            z-index: 5;
         }
 
         .expense-item.completed {
-            opacity: 0.6;
-            background-color: #f5f7fa;
-            border-left-color: #95a5a6;
+            opacity: 0.5;
+            background-color: rgba(0, 0, 0, 0.5);
+            border-left-color: #555;
+            filter: grayscale(100%);
+        }
+
+        .expense-item.completed::before {
+            display: none;
         }
 
         .expense-item.completed .expense-item-name,
         .expense-item.completed .expense-item-amount {
-            color: #999;
+            color: #777;
             text-decoration: line-through;
         }
 
@@ -295,61 +417,71 @@
 
         .expense-item-name {
             font-weight: 600;
-            color: #2c3e50;
+            color: var(--cp-text);
             margin-bottom: 4px;
             cursor: pointer;
             padding: 4px 8px;
-            border-radius: 4px;
+            border-radius: 0;
             transition: all 0.2s ease;
             word-break: break-word;
+            font-size: 14px;
         }
 
         .expense-item-name:hover {
-            background-color: rgba(102, 126, 234, 0.1);
+            color: var(--cp-neon-yellow);
+            text-shadow: 0 0 5px var(--cp-neon-yellow);
         }
 
         .expense-item-name.editing {
-            background-color: #fff3cd;
+            background-color: rgba(255, 238, 0, 0.1);
+            border: 1px dashed var(--cp-neon-yellow);
         }
 
         .expense-item-name input {
             width: 100%;
             padding: 6px 8px;
-            border: 1px solid #667eea;
-            border-radius: 4px;
+            border: 1px solid var(--cp-neon-yellow);
+            background: #000;
+            color: var(--cp-neon-yellow);
+            border-radius: 0;
             font-size: 14px;
-            font-weight: 600;
             font-family: inherit;
         }
 
         .expense-item-amount {
-            font-size: 13px;
-            color: #666;
+            font-size: 16px;
+            color: var(--cp-neon-yellow);
             cursor: pointer;
             padding: 4px 8px;
-            border-radius: 4px;
+            border-radius: 0;
             transition: all 0.2s ease;
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 1px;
         }
 
         .expense-item-amount:hover {
-            background-color: rgba(102, 126, 234, 0.1);
+            background-color: rgba(255, 238, 0, 0.1);
         }
 
         .expense-item-amount.editing {
-            background-color: #fff3cd;
+            background-color: rgba(255, 238, 0, 0.1);
+            border: 1px dashed var(--cp-neon-yellow);
         }
 
         .expense-item-amount input {
-            width: 90px;
+            width: 100px;
             padding: 4px 8px;
-            border: 1px solid #667eea;
-            border-radius: 4px;
-            font-size: 13px;
-            font-family: inherit;
+            border: 1px solid var(--cp-neon-yellow);
+            background: #000;
+            color: var(--cp-neon-yellow);
+            border-radius: 0;
+            font-size: 14px;
+            font-family: 'Orbitron', sans-serif;
         }
 
         .expense-item-actions {
             display: flex;
+            flex-direction: column;
             gap: 8px;
             margin-left: 10px;
             flex-shrink: 0;
@@ -357,70 +489,89 @@
 
         .expense-item-actions button {
             padding: 6px 10px;
-            border: none;
-            border-radius: 6px;
-            font-size: 11px;
+            border: 1px solid #444;
+            border-radius: 0;
+            font-size: 10px;
             cursor: pointer;
             transition: all 0.3s ease;
-            font-weight: 500;
+            font-weight: 600;
             white-space: nowrap;
+            background: transparent;
+            color: #aaa;
         }
 
         .btn-complete {
-            background-color: #27ae60;
-            color: white;
+            border-color: var(--cp-neon-green) !important;
+            color: var(--cp-neon-green) !important;
         }
 
         .btn-complete:hover {
-            background-color: #229954;
-            transform: translateY(-1px);
+            background: var(--cp-neon-green) !important;
+            color: #000 !important;
+            box-shadow: 0 0 10px var(--cp-neon-green);
         }
 
         .btn-delete {
-            background-color: #e74c3c;
-            color: white;
+            border-color: #ff3333 !important;
+            color: #ff3333 !important;
         }
 
         .btn-delete:hover {
-            background-color: #c0392b;
-            transform: translateY(-1px);
+            background: #ff3333 !important;
+            color: white !important;
+            box-shadow: 0 0 10px #ff3333;
         }
 
         .expense-item.completed .btn-complete {
-            background-color: #95a5a6;
+            border-color: #555 !important;
+            color: #555 !important;
         }
 
-        .expense-item.completed .btn-complete:hover {
-            background-color: #7f8c8d;
-        }
-
-        /* 収入項目のスタイル */
         .income-item {
             display: flex;
             justify-content: space-between;
             align-items: center;
             padding: 15px;
-            background-color: white;
-            border: 1px solid #e0e6ed;
-            border-left: 4px solid #27ae60;
-            border-radius: 8px;
+            background-color: var(--cp-bg-panel);
+            border: 1px solid var(--cp-border);
+            border-left: 2px solid var(--cp-neon-green);
+            border-radius: 0;
             margin-bottom: 12px;
             transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .income-item::before {
+            content: "";
+            position: absolute;
+            top: -1px;
+            right: -1px;
+            width: 10px;
+            height: 10px;
+            border-top: 2px solid var(--cp-neon-green);
+            border-right: 2px solid var(--cp-neon-green);
         }
 
         .income-item:hover {
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            box-shadow: 0 0 15px rgba(0, 255, 65, 0.1);
+            border-color: rgba(0, 255, 65, 0.3);
+            z-index: 5;
         }
 
         .income-item.inactive {
-            opacity: 0.6;
-            background-color: #f5f7fa;
-            border-left-color: #95a5a6;
+            opacity: 0.5;
+            background-color: rgba(0, 0, 0, 0.5);
+            border-left-color: #555;
+            filter: grayscale(100%);
+        }
+
+        .income-item.inactive::before {
+            display: none;
         }
 
         .income-item.inactive .income-item-name,
         .income-item.inactive .income-item-amount {
-            color: #999;
+            color: #777;
             text-decoration: line-through;
         }
 
@@ -431,61 +582,71 @@
 
         .income-item-name {
             font-weight: 600;
-            color: #2c3e50;
+            color: var(--cp-text);
             margin-bottom: 4px;
             cursor: pointer;
             padding: 4px 8px;
-            border-radius: 4px;
+            border-radius: 0;
             transition: all 0.2s ease;
             word-break: break-word;
+            font-size: 14px;
         }
 
         .income-item-name:hover {
-            background-color: rgba(102, 126, 234, 0.1);
+            color: var(--cp-neon-green);
+            text-shadow: 0 0 5px var(--cp-neon-green);
         }
 
         .income-item-name.editing {
-            background-color: #fff3cd;
+            background-color: rgba(0, 255, 65, 0.1);
+            border: 1px dashed var(--cp-neon-green);
         }
 
         .income-item-name input {
             width: 100%;
             padding: 6px 8px;
-            border: 1px solid #667eea;
-            border-radius: 4px;
+            border: 1px solid var(--cp-neon-green);
+            background: #000;
+            color: var(--cp-neon-green);
+            border-radius: 0;
             font-size: 14px;
-            font-weight: 600;
             font-family: inherit;
         }
 
         .income-item-amount {
-            font-size: 13px;
-            color: #666;
+            font-size: 16px;
+            color: var(--cp-neon-green);
             cursor: pointer;
             padding: 4px 8px;
-            border-radius: 4px;
+            border-radius: 0;
             transition: all 0.2s ease;
+            font-family: 'Orbitron', sans-serif;
+            letter-spacing: 1px;
         }
 
         .income-item-amount:hover {
-            background-color: rgba(102, 126, 234, 0.1);
+            background-color: rgba(0, 255, 65, 0.1);
         }
 
         .income-item-amount.editing {
-            background-color: #fff3cd;
+            background-color: rgba(0, 255, 65, 0.1);
+            border: 1px dashed var(--cp-neon-green);
         }
 
         .income-item-amount input {
-            width: 90px;
+            width: 100px;
             padding: 4px 8px;
-            border: 1px solid #667eea;
-            border-radius: 4px;
-            font-size: 13px;
-            font-family: inherit;
+            border: 1px solid var(--cp-neon-green);
+            background: #000;
+            color: var(--cp-neon-green);
+            border-radius: 0;
+            font-size: 14px;
+            font-family: 'Orbitron', sans-serif;
         }
 
         .income-item-actions {
             display: flex;
+            flex-direction: column;
             gap: 8px;
             margin-left: 10px;
             flex-shrink: 0;
@@ -493,44 +654,50 @@
 
         .income-item-actions button {
             padding: 6px 10px;
-            border: none;
-            border-radius: 6px;
-            font-size: 11px;
+            border: 1px solid #444;
+            border-radius: 0;
+            font-size: 10px;
             cursor: pointer;
             transition: all 0.3s ease;
-            font-weight: 500;
+            font-weight: 600;
             white-space: nowrap;
+            background: transparent;
+            color: #aaa;
         }
 
         .btn-toggle {
-            background-color: #3498db;
-            color: white;
+            border-color: var(--cp-neon-cyan) !important;
+            color: var(--cp-neon-cyan) !important;
         }
 
         .btn-toggle:hover {
-            background-color: #2980b9;
-            transform: translateY(-1px);
+            background: var(--cp-neon-cyan) !important;
+            color: #000 !important;
+            box-shadow: 0 0 10px var(--cp-neon-cyan);
         }
 
         .btn-delete-income {
-            background-color: #e74c3c;
-            color: white;
+            border-color: #ff3333 !important;
+            color: #ff3333 !important;
         }
 
         .btn-delete-income:hover {
-            background-color: #c0392b;
-            transform: translateY(-1px);
+            background: #ff3333 !important;
+            color: white !important;
+            box-shadow: 0 0 10px #ff3333;
         }
 
         .income-item.inactive .btn-toggle {
-            background-color: #27ae60;
+            border-color: var(--cp-neon-green) !important;
+            color: var(--cp-neon-green) !important;
+            background: transparent;
         }
 
         .income-item.inactive .btn-toggle:hover {
-            background-color: #229954;
+            background: var(--cp-neon-green) !important;
+            color: #000 !important;
         }
 
-        /* レスポンシブ対応 */
         @media (max-width: 600px) {
             .header h1 {
                 font-size: 20px;
@@ -546,7 +713,7 @@
             }
 
             .summary-display .amount {
-                font-size: 36px;
+                font-size: 32px;
             }
 
             .summary-stats {
@@ -564,42 +731,147 @@
 
             .expense-item,
             .income-item {
-                flex-direction: column;
-                align-items: flex-start;
+                flex-direction: row;
+                align-items: center;
+                padding: 10px;
             }
 
             .expense-item-actions,
             .income-item-actions {
-                margin-left: 0;
-                margin-top: 10px;
-                width: 100%;
+                display: flex;
+                flex-direction: column;
+                gap: 5px;
+                margin-left: 10px;
+                margin-top: 0;
+                width: auto;
             }
 
             .expense-item-actions button,
             .income-item-actions button {
-                flex: 1;
-            }
-
-            .nav {
-                padding: 8px 10px;
-                padding-bottom: calc(8px + env(safe-area-inset-bottom));
-            }
-
-            .nav button {
-                font-size: 12px;
-                padding: 10px 8px;
+                padding: 6px 8px;
+                font-size: 10px;
+                min-width: 70px;
             }
         }
 
-        @media (max-width: 400px) {
-            .summary-display .amount {
-                font-size: 32px;
-            }
+        .dragging {
+            opacity: 0.9;
+            background-color: var(--cp-bg-panel);
+            box-shadow: 0 0 20px rgba(0, 243, 255, 0.4);
+            transform: scale(1.02);
+            position: relative;
+            z-index: 100;
+            border: 1px solid var(--cp-neon-cyan);
+        }
 
-            .expense-item-actions,
-            .income-item-actions {
-                flex-direction: column;
-            }
+        .amount-input-container {
+            display: flex;
+            gap: 10px;
+            align-items: stretch;
+            position: relative;
+        }
+
+        .input-relative {
+            position: relative;
+            flex: 1;
+        }
+
+        .amount-input-container input {
+            width: 100%;
+            padding-right: 35px;
+        }
+
+        .btn-clear-input {
+            position: absolute;
+            right: 8px;
+            top: 50%;
+            transform: translateY(-50%);
+            background: transparent;
+            color: var(--cp-text-dim);
+            border: 1px solid var(--cp-text-dim);
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            font-size: 12px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.2s;
+            z-index: 5;
+        }
+
+        .btn-clear-input:hover {
+            background: #ff3333;
+            color: #fff;
+            border-color: #ff3333;
+            box-shadow: 0 0 5px #ff3333;
+        }
+
+        .inline-edit-container {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            width: 100%;
+        }
+
+        .inline-edit-container input {
+            flex: 1;
+            min-width: 60px;
+        }
+
+        .btn-clear-inline {
+            background: transparent;
+            color: var(--cp-text-dim);
+            border: 1px solid var(--cp-text-dim);
+            border-radius: 50%;
+            width: 18px;
+            height: 18px;
+            font-size: 10px;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .btn-clear-inline:hover {
+            background: #ff3333;
+            color: #fff;
+            border-color: #ff3333;
+        }
+
+        .amount-helper-buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .btn-amount-add {
+            padding: 4px 8px;
+            font-size: 11px;
+            background-color: rgba(255, 255, 255, 0.05);
+            color: var(--cp-neon-cyan);
+            border: 1px solid rgba(0, 243, 255, 0.3);
+            border-radius: 0;
+            cursor: pointer;
+            font-weight: 600;
+            transition: all 0.2s;
+            height: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            white-space: nowrap;
+        }
+
+        .btn-amount-add:hover {
+            background-color: rgba(0, 243, 255, 0.2);
+            box-shadow: 0 0 5px rgba(0, 243, 255, 0.3);
+        }
+
+        .btn-amount-add:active {
+            background-color: var(--cp-neon-cyan);
+            color: #000;
         }
     </style>
 
@@ -614,7 +886,8 @@
 <body>
     <div class="container">
         <div class="header">
-            <h1>💰 月次収支管理</h1>
+            <h1><span style="color: var(--cp-neon-cyan);">月次</span><span style="color: var(--cp-neon-pink);">収支管理</span>
+            </h1>
         </div>
 
         <div class="content">
@@ -641,7 +914,8 @@
 
             <!-- 収入入力ページ -->
             <div class="page" id="income-page">
-                <h2>💵 収入入力</h2>
+                <h2><span style="font-size: 1.2em;">収入</span> <span
+                        style="font-size: 0.8em; color: var(--cp-neon-green);">▲</span></h2>
                 <div class="page-content">
                     <div class="form-section">
                         <div class="form-group">
@@ -650,7 +924,19 @@
                         </div>
                         <div class="form-group">
                             <label for="income-amount">金額</label>
-                            <input type="number" id="income-amount" placeholder="0" min="0">
+                            <div class="amount-input-container">
+                                <div class="input-relative">
+                                    <input type="number" id="income-amount" placeholder="0" min="0">
+                                    <button class="btn-clear-input"
+                                        onclick="clearInputAmount('income-amount')">×</button>
+                                </div>
+                                <div class="amount-helper-buttons">
+                                    <button class="btn-amount-add"
+                                        onclick="addAmountToInput('income-amount', 1000)">+1000</button>
+                                    <button class="btn-amount-add"
+                                        onclick="addAmountToInput('income-amount', 100)">+100</button>
+                                </div>
+                            </div>
                         </div>
                         <button class="add-button" id="add-income-btn">+ 追加</button>
                     </div>
@@ -663,7 +949,8 @@
 
             <!-- 支出入力ページ -->
             <div class="page" id="expense-page">
-                <h2>💳 支出入力</h2>
+                <h2><span style="font-size: 1.2em;">支出</span> <span
+                        style="font-size: 0.8em; color: var(--cp-neon-yellow);">▼</span></h2>
                 <div class="page-content">
                     <div class="form-section">
                         <div class="form-group">
@@ -672,7 +959,19 @@
                         </div>
                         <div class="form-group">
                             <label for="expense-amount">金額</label>
-                            <input type="number" id="expense-amount" placeholder="0" min="0">
+                            <div class="amount-input-container">
+                                <div class="input-relative">
+                                    <input type="number" id="expense-amount" placeholder="0" min="0">
+                                    <button class="btn-clear-input"
+                                        onclick="clearInputAmount('expense-amount')">×</button>
+                                </div>
+                                <div class="amount-helper-buttons">
+                                    <button class="btn-amount-add"
+                                        onclick="addAmountToInput('expense-amount', 1000)">+1000</button>
+                                    <button class="btn-amount-add"
+                                        onclick="addAmountToInput('expense-amount', 100)">+100</button>
+                                </div>
+                            </div>
                         </div>
                         <button class="add-button" id="add-expense-btn">+ 追加</button>
                     </div>
@@ -686,9 +985,9 @@
 
         <!-- ナビゲーション -->
         <div class="nav">
-            <button class="nav-btn active" data-page="summary-page">📊 サマリー</button>
-            <button class="nav-btn" data-page="income-page">💵 収入</button>
-            <button class="nav-btn" data-page="expense-page">💳 支出</button>
+            <button class="nav-btn active" data-page="summary-page">サマリー</button>
+            <button class="nav-btn" data-page="income-page">収入</button>
+            <button class="nav-btn" data-page="expense-page">支出</button>
         </div>
     </div>
 
@@ -736,7 +1035,7 @@
         }
 
         function addIncome(name, amount) {
-            if (!name || name.trim() === '' || isNaN(amount) || amount <= 0) {
+            if (!name || name.trim() === '' || isNaN(amount) || amount < 0) {
                 alert('項目名と正当な金額を入力してください');
                 return null;
             }
@@ -756,7 +1055,7 @@
         }
 
         function addExpense(name, amount) {
-            if (!name || name.trim() === '' || isNaN(amount) || amount <= 0) {
+            if (!name || name.trim() === '' || isNaN(amount) || amount < 0) {
                 alert('項目名と正当な金額を入力してください');
                 return null;
             }
@@ -802,6 +1101,121 @@
                 saveDataToStorage();
                 updateSummaryDisplay();
                 console.log('支出を削除');
+            }
+        }
+
+        // ============================================
+        // ドラッグ＆ドロップ並べ替え
+        // ============================================
+
+        function enableDragAndDrop(listId, type, renderCallback) {
+            const listElement = document.getElementById(listId);
+            let draggedItem = null;
+            let touchTimer = null;
+            let startY = 0;
+            let initialIndex = -1;
+
+            listElement.addEventListener('touchstart', (e) => {
+                const item = e.target.closest('.expense-item, .income-item');
+                // 入力フォームやボタンでのタッチは除外
+                if (!item || e.target.tagName === 'INPUT' || e.target.tagName === 'BUTTON') return;
+
+                startY = e.touches[0].clientY;
+
+                // 長押し判定 (500ms)
+                touchTimer = setTimeout(() => {
+                    draggedItem = item;
+                    initialIndex = Array.from(listElement.children).indexOf(item);
+                    item.classList.add('dragging');
+                    // 振動フィードバック (対応デバイスのみ)
+                    if (navigator.vibrate) navigator.vibrate(50);
+                }, 500);
+            }, { passive: false });
+
+            listElement.addEventListener('touchmove', (e) => {
+                if (!draggedItem) {
+                    // 長押し成立前に大きく動かしたらキャンセル
+                    if (touchTimer && Math.abs(e.touches[0].clientY - startY) > 10) {
+                        clearTimeout(touchTimer);
+                        touchTimer = null;
+                    }
+                    return;
+                }
+
+                e.preventDefault(); // スクロール阻止
+                const touch = e.touches[0];
+                const elementAfter = getDragAfterElement(listElement, touch.clientY);
+
+                if (elementAfter == null) {
+                    listElement.appendChild(draggedItem);
+                } else {
+                    listElement.insertBefore(draggedItem, elementAfter);
+                }
+            }, { passive: false });
+
+            listElement.addEventListener('touchend', () => {
+                if (touchTimer) clearTimeout(touchTimer);
+                if (!draggedItem) return;
+
+                draggedItem.classList.remove('dragging');
+
+                // データ配列の並び替え
+                updateDataOrder(listElement, type);
+
+                draggedItem = null;
+                touchTimer = null;
+            });
+
+            // キャンセル関連
+            listElement.addEventListener('touchcancel', () => {
+                if (touchTimer) clearTimeout(touchTimer);
+                if (draggedItem) {
+                    draggedItem.classList.remove('dragging');
+                    draggedItem = null;
+                    // 元に戻す処理が必要なら追加（今回は簡略化のため現状維持で再描画が安全かも）
+                    renderCallback();
+                }
+            });
+        }
+
+        function getDragAfterElement(container, y) {
+            const draggableElements = [...container.querySelectorAll('.expense-item:not(.dragging), .income-item:not(.dragging)')];
+
+            return draggableElements.reduce((closest, child) => {
+                const box = child.getBoundingClientRect();
+                const offset = y - box.top - box.height / 2;
+                if (offset < 0 && offset > closest.offset) {
+                    return { offset: offset, element: child };
+                } else {
+                    return closest;
+                }
+            }, { offset: Number.NEGATIVE_INFINITY }).element;
+        }
+
+        function updateDataOrder(container, type) {
+            // 対象のデータ配列を取得
+            const dataArray = (type === 'income') ? incomeData : expenseData;
+            const newOrderIds = Array.from(container.children).map(el => {
+                // DOM要素からIDを特定する必要がある。
+                // 現在のレンダリング処理でdata-id属性などを付与していない場合、追加が必要。
+                // 仮にレンダリング時に activeInputId などを参照している箇所があるが、
+                // DOMにIDを持たせるのが確実。
+                return el.dataset.id;
+            }).filter(id => id); // 空のIDを除外
+
+            // IDに基づいて配列を再構築
+            const newDataArray = [];
+            newOrderIds.forEach(id => {
+                const item = dataArray.find(d => d.id === id);
+                if (item) newDataArray.push(item);
+            });
+
+            // dataArrayの中身を入れ替える
+            // (参照渡しされた配列の中身を書き換える必要があるため、spliceを使う)
+            if (newDataArray.length === dataArray.length) {
+                dataArray.splice(0, dataArray.length, ...newDataArray);
+                saveDataToStorage();
+                console.log('並び替え保存完了');
             }
         }
 
@@ -892,7 +1306,10 @@
                     '</div>' +
                     '<div class="income-item-amount" onclick="toggleEditIncomeAmount(\'' + income.id + '\')">' +
                     '<span class="amount-display">' + formatCurrency(income.amount) + '</span>' +
-                    '<input class="amount-input" type="number" value="' + income.amount + '" style="display: none;" onblur="saveIncomeAmount(\'' + income.id + '\')" onkeypress="if(event.key===\'Enter\') saveIncomeAmount(\'' + income.id + '\')">' +
+                    '<div class="inline-edit-container" style="display: none;">' +
+                    '<input class="amount-input" type="number" value="' + income.amount + '" onblur="saveIncomeAmount(\'' + income.id + '\')" onkeypress="if(event.key===\'Enter\') saveIncomeAmount(\'' + income.id + '\')">' +
+                    '<button class="btn-clear-inline" onmousedown="event.preventDefault(); clearInlineInput(this)">×</button>' +
+                    '</div>' +
                     '</div>' +
                     '</div>' +
                     '<div class="income-item-actions">' +
@@ -942,11 +1359,12 @@
         function toggleEditIncomeAmount(id) {
             const item = document.querySelector('.income-item[data-id="' + id + '"] .income-item-amount');
             const display = item.querySelector('.amount-display');
+            const container = item.querySelector('.inline-edit-container');
             const input = item.querySelector('.amount-input');
 
-            if (input.style.display === 'none') {
+            if (container.style.display === 'none') {
                 display.style.display = 'none';
-                input.style.display = 'block';
+                container.style.display = 'flex';
                 input.focus();
                 item.classList.add('editing');
             }
@@ -955,10 +1373,11 @@
         function saveIncomeAmount(id) {
             const item = document.querySelector('.income-item[data-id="' + id + '"] .income-item-amount');
             const display = item.querySelector('.amount-display');
+            const container = item.querySelector('.inline-edit-container');
             const input = item.querySelector('.amount-input');
             const newAmount = Number(input.value);
 
-            if (!isNaN(newAmount) && newAmount > 0) {
+            if (!isNaN(newAmount) && newAmount >= 0) {
                 updateIncome(id, { amount: newAmount });
                 display.textContent = formatCurrency(newAmount);
             } else {
@@ -966,7 +1385,7 @@
             }
 
             display.style.display = 'block';
-            input.style.display = 'none';
+            container.style.display = 'none';
             item.classList.remove('editing');
             renderIncomeList();
         }
@@ -1008,7 +1427,10 @@
                     '</div>' +
                     '<div class="expense-item-amount" onclick="toggleEditExpenseAmount(\'' + expense.id + '\')">' +
                     '<span class="amount-display">' + formatCurrency(expense.amount) + '</span>' +
-                    '<input class="amount-input" type="number" value="' + expense.amount + '" style="display: none;" onblur="saveExpenseAmount(\'' + expense.id + '\')" onkeypress="if(event.key===\'Enter\') saveExpenseAmount(\'' + expense.id + '\')">' +
+                    '<div class="inline-edit-container" style="display: none;">' +
+                    '<input class="amount-input" type="number" value="' + expense.amount + '" onblur="saveExpenseAmount(\'' + expense.id + '\')" onkeypress="if(event.key===\'Enter\') saveExpenseAmount(\'' + expense.id + '\')">' +
+                    '<button class="btn-clear-inline" onmousedown="event.preventDefault(); clearInlineInput(this)">×</button>' +
+                    '</div>' +
                     '</div>' +
                     '</div>' +
                     '<div class="expense-item-actions">' +
@@ -1052,11 +1474,12 @@
         function toggleEditExpenseAmount(id) {
             const item = document.querySelector('.expense-item[data-id="' + id + '"] .expense-item-amount');
             const display = item.querySelector('.amount-display');
+            const container = item.querySelector('.inline-edit-container');
             const input = item.querySelector('.amount-input');
 
-            if (input.style.display === 'none') {
+            if (container.style.display === 'none') {
                 display.style.display = 'none';
-                input.style.display = 'block';
+                container.style.display = 'flex';
                 input.focus();
                 item.classList.add('editing');
             }
@@ -1065,10 +1488,11 @@
         function saveExpenseAmount(id) {
             const item = document.querySelector('.expense-item[data-id="' + id + '"] .expense-item-amount');
             const display = item.querySelector('.amount-display');
+            const container = item.querySelector('.inline-edit-container');
             const input = item.querySelector('.amount-input');
             const newAmount = Number(input.value);
 
-            if (!isNaN(newAmount) && newAmount > 0) {
+            if (!isNaN(newAmount) && newAmount >= 0) {
                 updateExpense(id, { amount: newAmount });
                 display.textContent = formatCurrency(newAmount);
             } else {
@@ -1076,7 +1500,7 @@
             }
 
             display.style.display = 'block';
-            input.style.display = 'none';
+            container.style.display = 'none';
             item.classList.remove('editing');
             renderExpenseList();
         }
@@ -1104,6 +1528,10 @@
             updateSummaryDisplay();
             renderExpenseList();
             renderIncomeList();
+
+            // ドラッグ＆ドロップの有効化
+            enableDragAndDrop('income-list', 'income', renderIncomeList);
+            enableDragAndDrop('expense-list', 'expense', renderExpenseList);
 
             document.getElementById('add-expense-btn').addEventListener('click', function () {
                 const nameInput = document.getElementById('expense-name');
@@ -1151,6 +1579,26 @@
                 this.classList.add('active');
             });
         });
+
+        function addAmountToInput(inputId, amount) {
+            const input = document.getElementById(inputId);
+            const currentValue = Number(input.value) || 0;
+            input.value = currentValue + amount;
+            input.focus();
+        }
+
+        function clearInputAmount(inputId) {
+            const input = document.getElementById(inputId);
+            input.value = '';
+            input.focus();
+        }
+
+        function clearInlineInput(btn) {
+            const container = btn.parentElement;
+            const input = container.querySelector('input');
+            input.value = '';
+            input.focus();
+        }
     </script>
 
     <script>
