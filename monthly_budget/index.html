@@ -319,8 +319,9 @@
         body.simple-mode .summary-display {
             background: white;
             border: 1px solid #dee2e6;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.05);
             margin-bottom: 20px;
+            border-radius: 20px;
         }
 
         body.simple-mode .summary-display::after {
@@ -341,7 +342,8 @@
             background: white;
             border: 1px solid #dee2e6;
             border-left: 4px solid var(--cp-neon-pink);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.03);
+            border-radius: 16px;
         }
 
         body.simple-mode .summary-stats-item .value {
@@ -352,7 +354,8 @@
         body.simple-mode .form-section {
             background: white;
             border: 1px solid #dee2e6;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.03);
+            border-radius: 20px;
         }
 
         body.simple-mode .form-group label {
@@ -360,10 +363,10 @@
         }
 
         body.simple-mode .form-group input {
-            background: #ffffff;
+            background: #f8f9fa;
             border: 1px solid #ced4da;
             color: #212529;
-            border-radius: 4px;
+            border-radius: 10px;
         }
 
         body.simple-mode .form-group input:focus {
@@ -376,9 +379,10 @@
             background: #0d6efd;
             color: white;
             border: none;
-            box-shadow: none;
-            border-radius: 4px;
+            box-shadow: 0 4px 6px rgba(13, 110, 253, 0.2);
+            border-radius: 50px;
             text-shadow: none;
+            font-weight: 700;
         }
 
         body.simple-mode .add-button:hover {
@@ -391,8 +395,9 @@
             background: white;
             border: 1px solid #dee2e6;
             border-left-width: 4px;
-            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
-            border-radius: 4px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+            border-radius: 12px;
+            margin-bottom: 12px;
         }
 
         body.simple-mode .expense-item::before,
@@ -431,15 +436,19 @@
         }
 
         body.simple-mode .nav {
-            background: white;
+            background: rgba(255, 255, 255, 0.9);
             border-top: 1px solid #dee2e6;
-            box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.05);
+            box-shadow: 0 -4px 20px rgba(0, 0, 0, 0.05);
+            border-radius: 20px 20px 0 0;
+            backdrop-filter: blur(10px);
         }
 
         body.simple-mode .nav button {
             background: transparent;
-            color: #6c757d;
-            border: 1px solid transparent;
+            color: #adb5bd;
+            border: none;
+            border-radius: 12px;
+            margin: 0 5px;
         }
 
         body.simple-mode .nav button.active {
@@ -466,12 +475,14 @@
             background: #f8f9fa;
             border-color: #dee2e6;
             color: #6c757d;
+            border-radius: 12px;
         }
 
         body.simple-mode .modal-content {
             background: white;
             border: 1px solid #dee2e6;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+            border-radius: 20px;
         }
 
         body.simple-mode .modal-header {
@@ -485,6 +496,31 @@
 
         body.simple-mode .modal-close {
             color: #6c757d;
+        }
+
+        body.simple-mode .btn-amount-add {
+            border-radius: 6px;
+            background: #e9ecef;
+            color: #495057;
+            border: 1px solid #dee2e6;
+        }
+
+        body.simple-mode .btn-amount-add:hover {
+            background: #dee2e6;
+            color: #212529;
+            box-shadow: none;
+        }
+
+        body.simple-mode .btn-clear-input {
+            color: #adb5bd;
+            border-color: #dee2e6;
+        }
+
+        body.simple-mode .btn-clear-input:hover {
+            background: #adb5bd;
+            color: white;
+            border-color: #adb5bd;
+            box-shadow: none;
         }
 
 
